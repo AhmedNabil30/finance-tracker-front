@@ -1,0 +1,8 @@
+{
+    "buildCommand": "ng build --configuration=production",
+    "outputDirectory": "dist/finance-tracker",
+    "framework": "angular",
+    "routes": [
+      { "src": "^/.*", "dest": "/index.html" }
+    ]
+  }

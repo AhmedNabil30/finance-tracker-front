@@ -1,0 +1,108 @@
+.transaction-list {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  position: relative;
+}
+
+.list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-bottom: 1px solid #eee;
+
+  h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    color: #333;
+  }
+}
+
+.table-container {
+  overflow-x: auto;
+  padding: 20px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+
+  th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+  }
+
+  th {
+    font-weight: 600;
+    color: #666;
+    background: #f9f9f9;
+  }
+}
+
+.income { color: #4CAF50; }
+.expense { color: #f44336; }
+
+.actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &.btn-primary {
+    background: #2196F3;
+    color: white;
+    &:hover { background: #1976D2; }
+  }
+
+  &.btn-sm {
+    padding: 4px 8px;
+    font-size: 0.875rem;
+  }
+
+  &.btn-edit {
+    background: #FFA726;
+    color: white;
+    &:hover { background: #FB8C00; }
+  }
+
+  &.btn-delete {
+    background: #EF5350;
+    color: white;
+    &:hover { background: #E53935; }
+  }
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 500px;
+  margin: 20px;
+}
+
+.no-transactions {
+  text-align: center;
+  padding: 40px;
+  color: #666;
+}

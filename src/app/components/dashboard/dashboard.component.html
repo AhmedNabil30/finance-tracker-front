@@ -1,0 +1,100 @@
+<div class="dashboard-container">
+  <!-- Welcome Header -->
+  <header class="dashboard-header">
+    <div class="welcome-section">
+      <h1>Welcome, {{user?.name}}!</h1>
+      <p class="date">{{currentDate | date:'fullDate'}}</p>
+    </div>
+    <div class="action-buttons">
+      <button class="btn btn-primary" (click)="showTransactionForm()">
+        Add Transaction
+      </button>
+      <button class="btn btn-secondary" routerLink="/reports">
+        View Reports
+      </button>
+    </div>
+  </header>
+
+  <!-- Financial Summary Cards -->
+  <div class="summary-cards">
+    <div class="card balance" [class.negative]="totals.balance < 0">
+      <div class="card-content">
+        <div class="card-header">
+          <h3>Total Balance</h3>
+          <span class="trend" [class.up]="balanceTrend > 0" [class.down]="balanceTrend < 0">
+            {{balanceTrend > 0 ? '↑' : '↓'}} {{Math.abs(balanceTrend)}}%
+          </span>
+        </div>
+        <p class="amount">{{totals.balance | currency}}</p>
+      </div>
+      <div class="card-footer">
+        vs. last month
+      </div>
+    </div>
+    
+    <div class="card income">
+      <div class="card-content">
+        <div class="card-header">
+          <h3>Monthly Income</h3>
+          <span class="trend" [class.up]="incomeTrend > 0" [class.down]="incomeTrend < 0">
+            {{incomeTrend > 0 ? '↑' : '↓'}} {{Math.abs(incomeTrend)}}%
+          </span>
+        </div>
+        <p class="amount">{{totals.income | currency}}</p>
+      </div>
+      <div class="card-footer">
+        vs. last month
+      </div>
+    </div>
+    
+    <div class="card expenses">
+      <div class="card-content">
+        <div class="card-header">
+          <h3>Monthly Expenses</h3>
+          <span class="trend" [class.up]="expensesTrend < 0" [class.down]="expensesTrend > 0">
+            {{expensesTrend > 0 ? '↑' : '↓'}} {{Math.abs(expensesTrend)}}%
+          </span>
+        </div>
+        <p class="amount">{{totals.expenses | currency}}</p>
+      </div>
+      <div class="card-footer">
+        vs. last month
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Transactions -->
+  <div class="transactions-section">
+    <div class="section-header">
+      <h2>Recent Transactions</h2>
+      <button class="btn btn-link" routerLink="/transactions">View All</button>
+    </div>
+    <app-transaction-list [limit]="5"></app-transaction-list>
+  </div>
+
+  <!-- Quick Stats -->
+  <div class="quick-stats">
+    <div class="stats-section">
+      <h2>Top Categories This Month</h2>
+      <div class="category-list">
+        <div *ngFor="let category of topCategories" class="category-item">
+          <span class="category-name">{{category.name}}</span>
+          <span class="category-amount">{{category.amount | currency}}</span>
+          <div class="progress-bar">
+            <div class="progress" [style.width.%]="category.percentage"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Transaction Form Modal -->
+  <div *ngIf="showForm" class="modal-overlay" (click)="hideTransactionForm()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <app-transaction-form
+        (save)="onSaveTransaction($event)"
+        (cancel)="hideTransactionForm()"
+      ></app-transaction-form>
+    </div>
+  </div>
+</div>

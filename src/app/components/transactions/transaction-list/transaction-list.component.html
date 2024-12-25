@@ -1,0 +1,59 @@
+<div class="transaction-list">
+  <!-- Header section with add button -->
+  <div class="list-header">
+    <h3>Transactions</h3>
+    <button class="btn btn-primary" (click)="showAddForm()">
+      Add Transaction
+    </button>
+  </div>
+
+  <!-- Transaction table -->
+  <div class="table-container">
+    <table *ngIf="visibleTransactions.length > 0; else noTransactions">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Description</th>
+          <th>Category</th>
+          <th>Amount</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let transaction of visibleTransactions">
+          <td>{{transaction.date | date:'shortDate'}}</td>
+          <td>{{transaction.description}}</td>
+          <td>{{transaction.category}}</td>
+          <td [ngClass]="{'income': transaction.type === 'income', 'expense': transaction.type === 'expense'}">
+            {{transaction.type === 'income' ? '+' : '-'}}{{transaction.amount | currency}}
+          </td>
+          <td class="actions">
+            <button class="btn btn-sm btn-edit" (click)="editTransaction(transaction)">
+              Edit
+            </button>
+            <button class="btn btn-sm btn-delete" (click)="deleteTransaction(transaction.id)">
+              Delete
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <ng-template #noTransactions>
+      <div class="no-transactions">
+        No transactions found. Click "Add Transaction" to create one.
+      </div>
+    </ng-template>
+  </div>
+
+  <!-- Transaction Form Modal -->
+  <div *ngIf="showForm" class="modal-overlay" (click)="hideForm()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <app-transaction-form
+        [transaction]="selectedTransaction"
+        (save)="onSaveTransaction($event)"
+        (cancel)="hideForm()"
+      ></app-transaction-form>
+    </div>
+  </div>
+</div>

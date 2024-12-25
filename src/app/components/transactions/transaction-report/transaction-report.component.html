@@ -1,0 +1,129 @@
+<div class="report-container">
+    <header class="report-header">
+      <h2>Financial Report</h2>
+      <div class="date-range">
+        <p>{{startDate | date:'mediumDate'}} - {{endDate | date:'mediumDate'}}</p>
+      </div>
+    </header>
+
+    <!-- Overview Cards -->
+    <section class="overview-section">
+      <div class="summary-cards">
+        <div class="card total-income">
+          <h4>Total Income</h4>
+          <p class="amount">{{totalIncome | currency}}</p>
+          <p class="trend" [class.positive]="incomeTrend > 0" [class.negative]="incomeTrend < 0">
+            {{incomeTrend > 0 ? '↑' : '↓'}} {{Math.abs(incomeTrend)}}% vs last month
+          </p>
+        </div>
+
+        <div class="card total-expenses">
+          <h4>Total Expenses</h4>
+          <p class="amount">{{totalExpenses | currency}}</p>
+          <p class="trend" [class.positive]="expensesTrend < 0" [class.negative]="expensesTrend > 0">
+            {{expensesTrend > 0 ? '↑' : '↓'}} {{Math.abs(expensesTrend)}}% vs last month
+          </p>
+        </div>
+
+        <div class="card net-savings">
+          <h4>Net Savings</h4>
+          <p class="amount" [class.positive]="netBalance > 0" [class.negative]="netBalance < 0">
+            {{netBalance | currency}}
+          </p>
+          <p class="savings-rate">{{savingsRate}}% savings rate</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Monthly Trend Chart -->
+    <section class="trend-section">
+      <h3>Monthly Trends</h3>
+      <div class="chart-container">
+        <canvas #trendChart></canvas>
+      </div>
+    </section>
+
+    <!-- Monthly Details -->
+    <section class="monthly-section">
+      <h3>Monthly Breakdown</h3>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Month</th>
+              <th>Income</th>
+              <th>Expenses</th>
+              <th>Net Balance</th>
+              <th>Transactions</th>
+              <th>Avg Transaction</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let entry of monthlyData">
+              <td>{{formatMonth(entry.month)}}</td>
+              <td class="income">{{entry.summary.income | currency}}</td>
+              <td class="expense">{{entry.summary.expenses | currency}}</td>
+              <td [ngClass]="{'positive': entry.summary.balance > 0, 'negative': entry.summary.balance < 0}">
+                {{entry.summary.balance | currency}}
+              </td>
+              <td>{{entry.summary.transactionCount}}</td>
+              <td>{{entry.summary.avgTransactionAmount | currency}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Category Analysis -->
+    <section class="category-section">
+      <h3>Category Analysis</h3>
+      <div class="category-grid">
+        <div class="category-chart">
+          <canvas #categoryChart></canvas>
+        </div>
+        <div class="category-table">
+          <table>
+            <thead>
+              <tr>
+                <th>Category</th>
+                <th>Total</th>
+                <th>% of Budget</th>
+                <th>Transactions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let entry of categoryData">
+                <td>{{entry.category}}</td>
+                <td [ngClass]="{'positive': entry.summary.total > 0, 'negative': entry.summary.total < 0}">
+                  {{entry.summary.total | currency}}
+                </td>
+                <td>
+                  <div class="progress-bar">
+                    <div class="progress" [style.width.%]="entry.summary.percentage"></div>
+                    <span>{{entry.summary.percentage}}%</span>
+                  </div>
+                </td>
+                <td>{{entry.summary.transactionCount}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Insights Section -->
+    <section class="insights-section" *ngIf="insights.length > 0">
+      <h3>Financial Insights</h3>
+      <div class="insights-list">
+        <div class="insight-card" *ngFor="let insight of insights">
+          <div class="insight-icon" [ngClass]="insight.type">
+            {{insight.icon}}
+          </div>
+          <div class="insight-content">
+            <h4>{{insight.title}}</h4>
+            <p>{{insight.description}}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
